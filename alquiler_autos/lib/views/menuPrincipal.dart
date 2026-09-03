@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:alquiler_autos/views/detallevehiculo.dart';
+import 'package:alquiler_autos/views/detalle.dart';
 import 'package:alquiler_autos/views/menuDrawerPerfil.dart';
 
 class MenuPrincipal extends StatelessWidget {
@@ -25,8 +25,8 @@ class MenuPrincipal extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child:Column(
-          children:[
+        child: Column(
+          children: [
             TextField(
               style: TextStyle(color: texto),
               decoration: InputDecoration(
@@ -47,58 +47,61 @@ class MenuPrincipal extends StatelessWidget {
               child: autos.isEmpty
                   ? const Center(child: Text('No hay vehiculos para mostrar.'))
                   : ListView.builder(
-                    itemCount: autos.length,
-                    itemBuilder: (context, index){
-                      final auto = autos[index];
+                      itemCount: autos.length,
+                      itemBuilder: (context, index) {
+                        final auto = autos[index];
 
-                      return ListTile(
-                        leading: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.network(
-                            auto['imageUrl'].toString(),
-                            width: 50,
-                            height: 50,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, StackTrace){
-                              return Image.network(
-                                'https://picsum.photos/330/200',
-                                width: 50,
-                                height: 50,
-                                fit: BoxFit.cover,
-                              );
-                            },
-                          ),
-                        ),
-                        title: Text(
-                          '${auto['marca']} ${auto['modelo']}',
-                          style: TextStyle(
-                            color: texto,
-                            fontWeight: FontWeight.w600,
-                            ),
-                        ),
-                        subtitle: Text(
-                          'año: ${auto['anio']} precio: $${auto['precio']}',
-                          style: TextStyle(
-                            color: texto.withOpacity(0.8),
-                          ),
-                        ),
-                        trailing: Icon(Icons.arrow_forward_ios, color: encabezado),
-                        onTap: (){
-                          Navigator.push(context, 
-                          MaterialPageRoute(
-                            builder:(context) => DetalleVehiculoScreen(
-                              imageUrl: auto['imageUrl'],
-                              marca: auto['marca'],
-                              modelo: auto['modelo'],
-                              anio: auto['anio'],
-                              disponibilidad: auto['disponibilidad'],
-                              precio: auto['precio'],
+                        return ListTile(
+                          leading: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.network(
+                              auto['imageUrl'].toString(),
+                              width: 50,
+                              height: 50,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, StackTrace) {
+                                return Image.network(
+                                  'https://picsum.photos/330/200',
+                                  width: 50,
+                                  height: 50,
+                                  fit: BoxFit.cover,
+                                );
+                              },
                             ),
                           ),
-                          );
-                        },
-                      );
-                    },
+                          title: Text(
+                            '${auto['marca']} ${auto['modelo']}',
+                            style: TextStyle(
+                              color: texto,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          subtitle: Text(
+                            'año: ${auto['anio']} precio: \$${auto['precio']}',
+                            style: TextStyle(color: texto.withOpacity(0.8)),
+                          ),
+                          trailing: Icon(
+                            Icons.arrow_forward_ios,
+                            color: encabezado,
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetalleVehiculoScreen(
+                                  imageUrl: auto['imageUrl'].toString(),
+                                  marca: auto['marca'].toString(),
+                                  modelo: auto['modelo'].toString(),
+                                  anio: auto['anio'].toString(),
+                                  disponibilidad: auto['disponibilidad']
+                                      .toString(),
+                                  precio: auto['precio'].toString(),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
                     ),
             ),
           ],
@@ -110,24 +113,17 @@ class MenuPrincipal extends StatelessWidget {
         unselectedItemColor: texto.withOpacity(0.6),
         showUnselectedLabels: true,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Inicio',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
           BottomNavigationBarItem(
             icon: Icon(Icons.directions_car),
             label: 'Alquiler',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Usuario',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Usuario'),
         ],
-       ),
+      ),
     );
   }
 }
-
 
 /////
 List<Map<String, dynamic>> autos = [
@@ -188,99 +184,99 @@ List<Map<String, dynamic>> autos = [
     'precio': '\$79.99/dia',
   },
   {
-  'imageUrl': 'https://picsum.photos/330/200',
-  'marca': 'Mazda',
-  'modelo': 'CX-5',
-  'anio': 2022,
-  'disponibilidad': 1,
-  'precio': '\$92.99/dia',
-},
-{
-  'imageUrl': 'https://picsum.photos/330/200',
-  'marca': 'Ford',
-  'modelo': 'Explorer',
-  'anio': 2021,
-  'disponibilidad': 0,
-  'precio': '\$110.99/dia',
-},
-{
-  'imageUrl': 'https://picsum.photos/330/200',
-  'marca': 'Kia',
-  'modelo': 'Sportage',
-  'anio': 2023,
-  'disponibilidad': 1,
-  'precio': '\$89.99/dia',
-},
-{
-  'imageUrl': 'https://picsum.photos/330/200',
-  'marca': 'Hyundai',
-  'modelo': 'Tucson',
-  'anio': 2022,
-  'disponibilidad': 1,
-  'precio': '\$87.99/dia',
-},
-{
-  'imageUrl': 'https://picsum.photos/330/200',
-  'marca': 'Volkswagen',
-  'modelo': 'Jetta',
-  'anio': 2022,
-  'disponibilidad': 1,
-  'precio': '\$78.99/dia',
-},
-{
-  'imageUrl': 'https://picsum.photos/330/200',
-  'marca': 'Renault',
-  'modelo': 'Duster',
-  'anio': 2023,
-  'disponibilidad': 1,
-  'precio': '\$76.99/dia',
-},
-{
-  'imageUrl': 'https://picsum.photos/330/200',
-  'marca': 'BMW',
-  'modelo': 'Serie 3',
-  'anio': 2022,
-  'disponibilidad': 1,
-  'precio': '\$145.99/dia',
-},
-{
-  'imageUrl': 'https://picsum.photos/330/200',
-  'marca': 'Mercedes-Benz',
-  'modelo': 'Clase C',
-  'anio': 2023,
-  'disponibilidad': 0,
-  'precio': '\$159.99/dia',
-},
-{
-  'imageUrl': 'https://picsum.photos/330/200',
-  'marca': 'Audi',
-  'modelo': 'A4',
-  'anio': 2021,
-  'disponibilidad': 1,
-  'precio': '\$139.99/dia',
-},
-{
-  'imageUrl': 'https://picsum.photos/330/200',
-  'marca': 'Jeep',
-  'modelo': 'Compass',
-  'anio': 2022,
-  'disponibilidad': 1,
-  'precio': '\$99.99/dia',
-},
-{
-  'imageUrl': 'https://picsum.photos/330/200',
-  'marca': 'Suzuki',
-  'modelo': 'Vitara',
-  'anio': 2023,
-  'disponibilidad': 1,
-  'precio': '\$81.99/dia',
-},
-{
-  'imageUrl': 'https://picsum.photos/330/200',
-  'marca': 'Subaru',
-  'modelo': 'Forester',
-  'anio': 2022,
-  'disponibilidad': 0,
-  'precio': '\$96.99/dia',
-},
+    'imageUrl': 'https://picsum.photos/330/200',
+    'marca': 'Mazda',
+    'modelo': 'CX-5',
+    'anio': 2022,
+    'disponibilidad': 1,
+    'precio': '\$92.99/dia',
+  },
+  {
+    'imageUrl': 'https://picsum.photos/330/200',
+    'marca': 'Ford',
+    'modelo': 'Explorer',
+    'anio': 2021,
+    'disponibilidad': 0,
+    'precio': '\$110.99/dia',
+  },
+  {
+    'imageUrl': 'https://picsum.photos/330/200',
+    'marca': 'Kia',
+    'modelo': 'Sportage',
+    'anio': 2023,
+    'disponibilidad': 1,
+    'precio': '\$89.99/dia',
+  },
+  {
+    'imageUrl': 'https://picsum.photos/330/200',
+    'marca': 'Hyundai',
+    'modelo': 'Tucson',
+    'anio': 2022,
+    'disponibilidad': 1,
+    'precio': '\$87.99/dia',
+  },
+  {
+    'imageUrl': 'https://picsum.photos/330/200',
+    'marca': 'Volkswagen',
+    'modelo': 'Jetta',
+    'anio': 2022,
+    'disponibilidad': 1,
+    'precio': '\$78.99/dia',
+  },
+  {
+    'imageUrl': 'https://picsum.photos/330/200',
+    'marca': 'Renault',
+    'modelo': 'Duster',
+    'anio': 2023,
+    'disponibilidad': 1,
+    'precio': '\$76.99/dia',
+  },
+  {
+    'imageUrl': 'https://picsum.photos/330/200',
+    'marca': 'BMW',
+    'modelo': 'Serie 3',
+    'anio': 2022,
+    'disponibilidad': 1,
+    'precio': '\$145.99/dia',
+  },
+  {
+    'imageUrl': 'https://picsum.photos/330/200',
+    'marca': 'Mercedes-Benz',
+    'modelo': 'Clase C',
+    'anio': 2023,
+    'disponibilidad': 0,
+    'precio': '\$159.99/dia',
+  },
+  {
+    'imageUrl': 'https://picsum.photos/330/200',
+    'marca': 'Audi',
+    'modelo': 'A4',
+    'anio': 2021,
+    'disponibilidad': 1,
+    'precio': '\$139.99/dia',
+  },
+  {
+    'imageUrl': 'https://picsum.photos/330/200',
+    'marca': 'Jeep',
+    'modelo': 'Compass',
+    'anio': 2022,
+    'disponibilidad': 1,
+    'precio': '\$99.99/dia',
+  },
+  {
+    'imageUrl': 'https://picsum.photos/330/200',
+    'marca': 'Suzuki',
+    'modelo': 'Vitara',
+    'anio': 2023,
+    'disponibilidad': 1,
+    'precio': '\$81.99/dia',
+  },
+  {
+    'imageUrl': 'https://picsum.photos/330/200',
+    'marca': 'Subaru',
+    'modelo': 'Forester',
+    'anio': 2022,
+    'disponibilidad': 0,
+    'precio': '\$96.99/dia',
+  },
 ];

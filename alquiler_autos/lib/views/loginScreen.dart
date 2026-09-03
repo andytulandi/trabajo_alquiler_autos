@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -8,133 +9,104 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final Color fondo = Color(0xFFAFDDFF);
-  final Color encabezado = Color(0xFF60B5FF);
-  final Color campos = Color(0xFFFFECDB);
-  final Color boton = Color(0xFFFF9149);
-  final Color texto = Color(0xFF222222);
-}
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    backgroundColor: fondo,
-    body: Padding(
-      padding : const EdgeInsets.all(20.0),
-      child: ListView(
-        shrinkWrap: true,
-        children: [
-          Icon(Icons.person_pin,
-          size: 80,
-          color: encabezado,
-          ),//icono de usuario
-          SizedBox(height: 16),
-          Text("Bienvenido",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: encabezado,
-          ),
-          ),//texto de bienvenida
-          SizedBox(height: 8),
-          Text("Inicia sesión para continuar",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 16,
-            color: texto.withOpacity(0.7),
-          ),
-          ),//texto de instrucción
-          SizedBox(height: 90),
-          TextField(
-            style: TextStyle(color: texto),
-            decoration: InputDecoration(
-              filled:true,
-              fillColor: campos,
-              labelText: "Correo electrónico",
-              labelStyle: TextStyle(color: texto),
-              prefixIcon: Icon(Icons.email, color: encabezado),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide.none,
-              )// input decoration
-            ),// text field decoration
-          ),//campo de correo electrónico
-          SizedBox(height: 16),
-          TextField(
-            obscureText:true,
-            style: TextStyle(color: texto),
-            decoration: InputDecoration(
-              filled:true,
-              fillColor: campos,
-              labelText: "Contraseña",
-              labelStyle: TextStyle(color: texto),
-              prefixIcon: Icon(Icons.password, color: encabezado),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide.none,
-              )// input decoration
-          ), //text field decoration
-          ),//campo de contraseña
-          SizedBox(height: 24),
-          ElevatedButton(
-            onPressed: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MenuPrincipal()
-                ),//materialpage route
-              );
-            },//button on pressed
-            style: ElevatedButton.styleFrom(
-              backgroundColor: boton,
-              minimumSize: Size(double.infinity,48),
-            ),//button style
-            child: Text("Iniciar sesión",
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final Color background = const Color(0xFFAFDDFF);
+  final Color header = const Color(0xFF60B5FF);
+  final Color field = const Color(0xFFFFECDB);
+  final Color button = const Color(0xFFFF9149);
+
+  Future<void> _login() async {
+    final preferences = await SharedPreferences.getInstance();
+    final savedEmail = preferences.getString('userEmail');
+    final savedPassword = preferences.getString('userPassword');
+
+    if (!mounted) return;
+    if (_emailController.text.trim() == savedEmail &&
+        _passwordController.text == savedPassword) {
+      Navigator.pushReplacementNamed(context, '/menu');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Correo o contrasena incorrectos.')),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: background,
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: ListView(
+          children: [
+            Icon(Icons.person_pin, size: 80, color: header),
+            const SizedBox(height: 16),
+            Text(
+              'Bienvenido',
+              textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 16,
-                color: Colors.white,
-              )
-            )//button
-          ),//Elevatedbutton
-          SizedBox(height: 30),
-          Row(
-            mainAxisAlignment:MainAxisAlignment.center,
-            children:[
-              Text("¿olvidaste tu contraseña?",
-                style: TextStyle(color: texto),
-                ),//text
-              TextButton(
-                onPressed:(){},
-                child: Text("Recuperar",
-                  style: TextStyle(
-                    color: encabezado,
-                    fontWeight: FontWeight.bold,
-                  ),//textstyle
-                ),// texto
-              ),//textbutton
-              SizedBox(width: 12),
-            ],
-          ),// Row
-          Row(
-            mainAxisAlignment:MainAxisAlignment.center,
-            children:[
-              Text("¿No tienes cuenta?",
-                style: TextStyle(color: texto),
-                ),//text
-              TextButton(
-                onPressed:(){},
-                child: Text("Registrate",
-                  style: TextStyle(
-                    color: encabezado,
-                    fontWeight: FontWeight.bold,
-                  ),//textstyle
-                ),// texto
-              ),//textbutton
-              SizedBox(width: 12),
-            ],
-          ),// Row
-               
-        ],// children
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: header,
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'Inicia sesion para continuar',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 90),
+            TextField(
+              controller: _emailController,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: field,
+                labelText: 'Correo electronico',
+                prefixIcon: Icon(Icons.email, color: header),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _passwordController,
+              obscureText: true,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: field,
+                labelText: 'Contrasena',
+                prefixIcon: Icon(Icons.password, color: header),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: _login,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: button,
+                minimumSize: const Size(double.infinity, 48),
+              ),
+              child: const Text('Iniciar sesion'),
+            ),
+            const SizedBox(height: 24),
+            TextButton(
+              onPressed: () =>
+                  Navigator.pushReplacementNamed(context, '/registroUsuarios'),
+              child: Text(
+                'No tengo cuenta: Registrarme',
+                style: TextStyle(color: header),
+              ),
+            ),
+          ],
+        ),
       ),
-  )
-  );
+    );
+  }
 }

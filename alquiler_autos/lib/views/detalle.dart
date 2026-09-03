@@ -7,7 +7,7 @@ class DetalleVehiculoScreen extends StatelessWidget {
   final String modelo;
   final String anio;
   final String disponibilidad;
-  final double precio;
+  final String precio;
 
   const DetalleVehiculoScreen({
     super.key,
@@ -21,13 +21,12 @@ class DetalleVehiculoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color fondo = Color(0xFFAFDDFF);
     final Color encabezado = Color(0xFF60B5FF);
     final Color campos = Color(0xFFFFECDB);
     final Color boton = Color(0xFFFF9149);
     final Color texto = Color(0xFF222222);
 
-    final bool estaDisponible = disponibilidad == 0;
+    final bool estaDisponible = disponibilidad == '0';
 
     return Scaffold(
       appBar: AppBar(
@@ -128,7 +127,7 @@ class DetalleVehiculoScreen extends StatelessWidget {
                           );
                         }
                       : null,
-                  icon: const Icon(Icon.directions_car),
+                  icon: const Icon(Icons.directions_car),
                   label: const Text(
                     'solicitar alquiler',
                     style: TextStyle(fontSize: 16),
